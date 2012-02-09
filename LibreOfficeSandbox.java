@@ -19,9 +19,57 @@ public class LibreOfficeSandbox {
         com.sun.star.frame.XDesktop xDesktop = null;
         xDesktop = getDesktop();
         com.sun.star.text.XTextDocument xTextDocument =OpenTextdocument(xDesktop,"e:/MedVocab/MSA01092012002/MSA01092012004.DOC");
+        com.sun.star.text.XText xText = (com.sun.star.text.XText)xTextDocument.getText();
         
-        System.out.println(xTextDocument.getText().getString());
-        
+
+            com.sun.star.container.XEnumeration xParagraphEnumeration = null;
+            com.sun.star.container.XEnumerationAccess xParaEnumerationAccess = null;
+            com.sun.star.container.XEnumeration xPortionEnumeration = null;
+            com.sun.star.container.XEnumeration xTextPortionEnum;
+            com.sun.star.text.XTextContent xTextElement = null;
+            
+            System.out.println("create an enumeration of all paragraphs");
+            // create an enumeration access of all paragraphs of a document
+            com.sun.star.container.XEnumerationAccess xEnumerationAccess =
+                (com.sun.star.container.XEnumerationAccess)
+                    UnoRuntime.queryInterface(
+                        com.sun.star.container.XEnumerationAccess.class, xText);
+            xParagraphEnumeration = xEnumerationAccess.createEnumeration();
+
+            
+            try
+            {
+            while ( xParagraphEnumeration.hasMoreElements() ) {
+                xTextElement = (com.sun.star.text.XTextContent)
+                    UnoRuntime.queryInterface(
+                        com.sun.star.text.XTextContent.class,
+                        xParagraphEnumeration.nextElement());
+
+                xParaEnumerationAccess =
+                        (com.sun.star.container.XEnumerationAccess)
+                            UnoRuntime.queryInterface(
+                                com.sun.star.container.XEnumerationAccess.class,
+                                xTextElement);
+                    xTextPortionEnum = xParaEnumerationAccess.createEnumeration();
+                    
+                    while ( xTextPortionEnum.hasMoreElements() ) {
+                                                com.sun.star.text.XTextRange xTextPortion =
+                            (com.sun.star.text.XTextRange)UnoRuntime.queryInterface(
+                                com.sun.star.text.XTextRange.class,
+                                xTextPortionEnum.nextElement());
+                        System.out.print( xTextPortion.getString() +"|");
+
+                    }
+                System.out.println("\n\nParagraph");
+
+                }
+            }
+                
+            // Loop through all paragraphs of the document
+            catch( Exception e) {
+            e.printStackTrace(System.err);
+            System.exit(1);
+        }
 //        xTextDocument.dispose();
 //        xDesktop.terminate();
     }
