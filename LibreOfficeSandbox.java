@@ -52,15 +52,16 @@ public class LibreOfficeSandbox {
                                 xTextElement);
                     xTextPortionEnum = xParaEnumerationAccess.createEnumeration();
                     
+                System.out.println("<");
                     while ( xTextPortionEnum.hasMoreElements() ) {
                                                 com.sun.star.text.XTextRange xTextPortion =
                             (com.sun.star.text.XTextRange)UnoRuntime.queryInterface(
                                 com.sun.star.text.XTextRange.class,
                                 xTextPortionEnum.nextElement());
-                        System.out.print( xTextPortion.getString() +"|");
+                        System.out.print("("+ xTextPortion.getString() +")");
 
                     }
-                System.out.println("\n\nParagraph");
+                System.out.println(">Paragraph");
 
                 }
             }
