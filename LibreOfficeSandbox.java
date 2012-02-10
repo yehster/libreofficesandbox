@@ -36,7 +36,7 @@ public class LibreOfficeSandbox {
                         com.sun.star.container.XEnumerationAccess.class, xText);
             xParagraphEnumeration = xEnumerationAccess.createEnumeration();
 
-            
+            java.util.regex.Pattern p = java.util.regex.Pattern.compile("^[A-Z]+[/#-]?\\s??[A-Z]*:");
             try
             {
             while ( xParagraphEnumeration.hasMoreElements() ) {
@@ -52,15 +52,21 @@ public class LibreOfficeSandbox {
                                 xTextElement);
                     xTextPortionEnum = xParaEnumerationAccess.createEnumeration();
                     
-                System.out.println("<");
-                    while ( xTextPortionEnum.hasMoreElements() ) {
-                                                com.sun.star.text.XTextRange xTextPortion =
-                            (com.sun.star.text.XTextRange)UnoRuntime.queryInterface(
-                                com.sun.star.text.XTextRange.class,
-                                xTextPortionEnum.nextElement());
-                        System.out.print("("+ xTextPortion.getString() +")");
-
-                    }
+                System.out.print("<");
+                String sParagraph=xTextElement.getAnchor().getString().trim();
+                java.util.regex.Matcher m= p.matcher(sParagraph);
+                if(m.find())
+                {
+                    System.out.println("SECTION");
+                    String sHeader=sParagraph.substring(m.start(), m.end());
+                    String sRest=sParagraph.substring(m.end()).trim();
+                    System.out.println(sHeader);
+                    System.out.println(sRest);
+                }
+                else
+                {
+                    System.out.print(sParagraph);                
+                }
                 System.out.println(">Paragraph");
 
                 }
