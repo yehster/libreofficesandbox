@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package libreofficesandbox;
 
 import com.sun.star.uno.UnoRuntime;
 
@@ -10,6 +10,8 @@ import com.sun.star.uno.UnoRuntime;
  *
  * @author yehster
  */
+
+
 public class LibreOfficeSandbox {
 
     /**
@@ -39,35 +41,14 @@ public class LibreOfficeSandbox {
             java.util.regex.Pattern p = java.util.regex.Pattern.compile("^[A-Z]+[/#-]?\\s??[A-Z]*:");
             try
             {
+            DocumentAnalyzer docAnalyzer = new libreofficesandbox.DocumentAnalyzer();
             while ( xParagraphEnumeration.hasMoreElements() ) {
                 xTextElement = (com.sun.star.text.XTextContent)
                     UnoRuntime.queryInterface(
                         com.sun.star.text.XTextContent.class,
                         xParagraphEnumeration.nextElement());
-
-                xParaEnumerationAccess =
-                        (com.sun.star.container.XEnumerationAccess)
-                            UnoRuntime.queryInterface(
-                                com.sun.star.container.XEnumerationAccess.class,
-                                xTextElement);
-                    xTextPortionEnum = xParaEnumerationAccess.createEnumeration();
                     
-                System.out.print("<");
-                String sParagraph=xTextElement.getAnchor().getString().trim();
-                java.util.regex.Matcher m= p.matcher(sParagraph);
-                if(m.find())
-                {
-                    System.out.println("SECTION");
-                    String sHeader=sParagraph.substring(m.start(), m.end());
-                    String sRest=sParagraph.substring(m.end()).trim();
-                    System.out.println(sHeader);
-                    System.out.println(sRest);
-                }
-                else
-                {
-                    System.out.print(sParagraph);                
-                }
-                System.out.println(">Paragraph");
+                docAnalyzer.ParseParagraph(xTextElement);
 
                 }
             }
